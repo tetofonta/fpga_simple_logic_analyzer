@@ -1,0 +1,11 @@
+set(VERILOG_IVERILOG_COMPILER iverilog)
+set(VERILOG_VVP vvp)
+set(VERILOG_GTKWAVE gtkwave)
+
+function(test_target target_name test_file)
+    get_filename_component(test_file_name ${test_file} NAME)
+    add_custom_target(${target_name} COMMAND iverilog -o ${CMAKE_BINARY_DIR}/${target_name}.dsn ${test_file} ${ARGN} WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
+    add_custom_command(TARGET ${target_name} COMMAND vvp ${target_name}.dsn -v -l ${target_name}.log  WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
+    add_custom_command(TARGET ${target_name} COMMAND gtkwave ${test_file_name})
+    message("Created target: ${test_file_name}")
+endfunction()

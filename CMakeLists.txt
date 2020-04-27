@@ -1,0 +1,10 @@
+cmake_minimum_required(VERSION 3.16)
+project(logic_analyzer)
+include(verilog_cmake/env.cmake)
+
+test_target(redetector test/rising_edge_detector_test.v src/rising_edge_detector.v)
+test_target(pcdetector test/pin_change_detector_test.v src/pin_change_detector.v)
+test_target(trigger test/channel_trigger_test.v src/channel_trigger.v src/rising_edge_detector.v src/rs_flipflop.v)
+test_target(timer test/timer_stepper_test.v src/time_stepper.v)
+test_target(step_limit test/step_limiter_test.v src/step_limiter.v)
+test_target(debouncer test/debouncer_test.v src/debouncer.v)
