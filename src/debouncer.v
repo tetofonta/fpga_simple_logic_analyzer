@@ -1,6 +1,6 @@
 module debouncer
 #(
-    parameter CLK_WAIT = 2500000
+    parameter CLK_WAIT = 25000000
 )(
     input i_clk,
     input button,

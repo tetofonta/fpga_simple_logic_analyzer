@@ -10,12 +10,12 @@ module time_stepper
 
 reg [31:0] counter = 0;
 
-always @(posedge i_clk, negedge i_run)
+always @(posedge i_clk)
 begin
     if(i_run) begin
         counter <= counter + 1;
         if(counter >= prescaler) begin
-            o_time = o_time + 1;
+            o_time <= o_time + 1;
             counter <= 0;
         end
     end

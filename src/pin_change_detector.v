@@ -14,6 +14,6 @@ reg [WIDTH-1:0] previous = 0;
 always @(posedge i_clk)
     previous <= i_data;
 
-assign o_changed = |(i_data ^ previous) & ~inhibit;
+assign o_changed = (|(i_data ^ previous)) & ~inhibit;
 
 endmodule

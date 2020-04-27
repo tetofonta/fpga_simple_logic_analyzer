@@ -8,7 +8,10 @@ module step_limiter(
 
 reg [31:0] count = 0;
 
-always @(posedge i_step & do_step_limit, negedge i_run & do_step_limit)
+wire condition;
+assign condition = i_step & do_step_limit | ~i_run;
+
+always @(posedge condition)
 begin
     if(i_run) begin
         count <= count + 1;
