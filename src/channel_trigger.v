@@ -32,7 +32,7 @@ rising_edge_detector tog_set_re (i_man_toggle, i_clk, man_ctrl);
 
 reg r_trig = 0;
 
-rs_flipflop trig_status ((start_trig | (man_ctrl & ~r_trig)) & ~i_rst, end_trig | rst_trig | (man_ctrl & r_trig), o_trig);
+rs_flipflop trig_status ((start_trig | (man_ctrl & ~r_trig)) & ~rst_trig, end_trig | rst_trig | (man_ctrl & r_trig), o_trig);
 
 always @(posedge i_clk & ~man_ctrl)
     r_trig <= o_trig;
