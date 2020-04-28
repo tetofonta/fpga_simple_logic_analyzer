@@ -8,3 +8,4 @@ test_target(trigger test/channel_trigger_test.v src/channel_trigger.v src/rising
 test_target(timer test/timer_stepper_test.v src/time_stepper.v)
 test_target(step_limit test/step_limiter_test.v src/step_limiter.v)
 test_target(debouncer test/debouncer_test.v src/debouncer.v)
+test_target(chinput test/channel_input_test.v src/*)
