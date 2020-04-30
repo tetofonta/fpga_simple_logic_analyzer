@@ -29,6 +29,7 @@ end
 
 wire fifo_clear = 0;
 wire fifo_read;
+wire read_sig;
 wire fifo_empty;
 wire fifo_full;
 wire save;
@@ -43,7 +44,7 @@ channel_input port_a (
     .end_trigger_edge(1'b1),
     ._end_trigger_enable(1'b0),
     .manual_toggle(i_btn),
-    .sample_limit(32'h14),
+    .sample_limit(32'h30),
     .do_sample_limit(1'b1),
     .time_prescaler(32'h17D7840), //25M
     ._mrst(rst_line),
@@ -56,11 +57,17 @@ channel_input port_a (
 debouncer read_fifo(
     .i_clk(i_clk),
     .button(i_read),
-    .signal(fifo_read)
+    .signal(read_sig)
+);
+
+rising_edge_detector read_edge(
+	.i_signal(read_sig),
+	.i_clk(i_clk),
+	.o_trig(fifo_read)
 );
 
 channel_fifo(
-	.aclr(fifo_clr),
+	.aclr(~rst_line),
 	.clock(i_clk),
 	.data(save_data),
 	.rdreq(fifo_read & ~fifo_empty),
