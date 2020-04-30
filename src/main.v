@@ -27,7 +27,7 @@ begin
         rst_ownership <= 1;
 end
 
-wire fifo_clear;
+wire fifo_clear = 0;
 wire fifo_read;
 wire fifo_empty;
 wire fifo_full;
@@ -51,6 +51,12 @@ channel_input port_a (
     .save(save),
     .data(save_data),
     .run(o_run)
+);
+
+debouncer read_fifo(
+    .i_clk(i_clk),
+    .button(i_read),
+    .signal(fifo_read)
 );
 
 channel_fifo(
