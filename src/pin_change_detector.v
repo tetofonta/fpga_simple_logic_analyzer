@@ -5,7 +5,7 @@ module pin_change_detector
 (
     input [WIDTH-1:0] i_data,
     input i_clk,
-    input inhibit,
+    input _inhibit,
     output o_changed
 );
 
@@ -18,6 +18,6 @@ always @(posedge i_clk)
 always @(negedge i_clk)
     previous_neg <= i_data;
 
-assign o_changed = ((|(i_data ^ previous_pos)) | (|((i_data ^ previous_neg)))) & ~inhibit;
+assign o_changed = ((|(i_data ^ previous_pos)) | (|((i_data ^ previous_neg)))) & _inhibit;
 
 endmodule

@@ -8,35 +8,47 @@ module channel_trigger
     input [$clog2(WIDTH) - 1 : 0] i_trig_end_select,
     input i_trig_end_edge,
     input i_clk,
-    input i_rst,
+    input i_rst_0,
+    input _i_rst_1,
     input i_man_toggle,
+    input _enable_start,
+    input _enable_end,
     output o_trig,
     output o_run
 );
 
 wire trig_start_condition;
 wire trig_end_condition;
-assign trig_start_condition = i_data[i_trig_start_select] ^ i_trig_start_edge;
-assign trig_end_condition = i_data[i_trig_end_select] ^ i_trig_end_edge;
+assign trig_start_condition = (i_data[i_trig_start_select] ^ i_trig_start_edge) & ~_enable_start;
+assign trig_end_condition = (i_data[i_trig_end_select] ^ i_trig_end_edge) & ~_enable_end;
 
 wire start_trig;
 wire end_trig;
-wire rst_trig;
 wire man_ctrl;
+wire rst_0_trig;
+wire rst_1_trig;
+wire rst_trig;
 
 rising_edge_detector set_re (trig_start_condition, i_clk, start_trig);
 rising_edge_detector rst_re (trig_end_condition, i_clk, end_trig);
-rising_edge_detector mrst_re (i_rst, i_clk, rst_trig);
-
 rising_edge_detector tog_set_re (i_man_toggle, i_clk, man_ctrl);
+
+rising_edge_detector rst_0_re (i_rst_0, i_clk, rst_0_trig);
+rising_edge_detector rst_1_re (~_i_rst_1, i_clk, rst_1_trig);
+assign rst_trig = (rst_0_trig & _i_rst_1) | rst_1_trig;
 
 reg r_trig = 0;
 
-rs_flipflop trig_status ((start_trig | (man_ctrl & ~r_trig)) & ~rst_trig, end_trig | rst_trig | (man_ctrl & r_trig), o_trig);
+wire trig_set;
+wire trig_reset;
+assign trig_set = (start_trig | (man_ctrl & ~r_trig & _i_rst_1)) & ~r_trig;
+assign trig_reset = (end_trig | (man_ctrl & r_trig & _i_rst_1)) & r_trig | rst_trig;
 
-always @(posedge i_clk & ~man_ctrl)
+rs_flipflop trig_status (trig_set, trig_reset, o_trig);
+wire update_condition;
+always @(posedge (i_clk & ~man_ctrl & ~trig_set & ~trig_reset))
     r_trig <= o_trig;
 
-assign o_run = o_trig & ~i_rst;
+assign o_run = o_trig & _i_rst_1;
 
 endmodule
