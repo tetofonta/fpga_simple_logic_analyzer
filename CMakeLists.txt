@@ -8,5 +8,5 @@ test_target(trigger test/channel_trigger_test.v src/channel_trigger.v src/rising
 test_target(timer test/timer_stepper_test.v src/time_stepper.v)
 test_target(step_limit test/step_limiter_test.v src/step_limiter.v)
 test_target(debouncer test/debouncer_test.v src/debouncer.v)
-test_target(chinput test/channel_input_test.v src/*)
-test_target(main test/test.v src/debouncer.v src/channel_trigger.v src/main_sim.v src/pin_change_detector.v src/rising_edge_detector.v src/rs_flipflop.v src/step_limiter.v src/time_stepper.v)
+test_target(chinput test/channel_input_test.v src/channel_input.v src/debouncer.v src/channel_trigger.v src/pin_change_detector.v src/rising_edge_detector.v src/rs_flipflop.v src/step_limiter.v src/time_stepper.v)
+test_target(main test/test.v src/main_sim.v src/channel_input.v src/debouncer.v src/channel_trigger.v src/pin_change_detector.v src/rising_edge_detector.v src/rs_flipflop.v src/step_limiter.v src/time_stepper.v)

@@ -9,80 +9,54 @@ module main(
 	output [31:0] o_data
 );
 
-wire [2:0] trig_start = 0;
-wire [2:0] trig_end = 1;
-//wire [31:0] time_prescaler = 50000000;
-wire [31:0] time_prescaler = 1; //
-wire trig_edge = 0;
-wire fifo_clr = 0;
-wire btn;
-wire o_trig;
-wire save;
+wire rst_line;
+reg internal_rst = 1;
+reg rst_ownership = 0;
+assign rst_line = (_mrst & rst_ownership) | (internal_rst & ~rst_ownership);
+
+parameter clocks_before = 5;
+parameter clocks_after = 5;
+reg [$clog2(clocks_before + clocks_after + 1) : 0] counter = 0;
+
+always @(posedge i_clk & ~rst_ownership)
+begin
+    counter <= counter + 1;
+    if(counter > clocks_before)
+        internal_rst <= 0;
+    if(counter > clocks_before + clocks_after)
+        rst_ownership <= 1;
+end
+
+wire fifo_clear;
 wire fifo_read;
-wire fifo_read_in;
-wire fifo_full = 0; //
-wire fifo_empty = 0;//
-wire limit_reached;
-wire o_time;
-wire do_limit = 1;
-//wire [31:0] step_limit = 20;
-wire [31:0] step_limit = 7;
+wire fifo_empty;
+wire fifo_full;
+wire save;
+wire [31:0] save_data;
 
-//debouncer toggle(
-//	.i_clk(i_clk),
-//	.button(i_read),
-//	.signal(fifo_read_in)
-//);
-assign fifo_read_in = i_btn; //
-
-rising_edge_detector fifo_read_re(
-	.i_signal(fifo_read_in),
-	.i_clk(i_clk),
-	.o_trig(fifo_read)
+channel_input port_a (
+    .i_clk(i_clk),
+    .start_trigger_index(3'b000),
+    .start_trigger_edge(1'b0),
+    ._start_trigger_enable(1'b0),
+    .end_trigger_index(3'b001),
+    .end_trigger_edge(1'b1),
+    ._end_trigger_enable(1'b0),
+    .manual_toggle(i_btn),
+    .sample_limit(32'h07),
+    .do_sample_limit(1'b1),
+    .time_prescaler(32'h01), //25M
+    ._mrst(rst_line),
+    .i_data(data),
+    .save(save),
+    .data(save_data),
+    .run(o_run)
 );
-
-//debouncer read(
-//	.i_clk(i_clk),
-//	.button(i_btn),
-//	.signal(btn)
-//);
-
-assign btn = i_btn; //
-
-channel_trigger ch1 (
-	.i_data(data),
-	.i_trig_start_select(trig_start),
-	.i_trig_end_select(trig_end),
-	.i_trig_start_edge(trig_edge),
-	.i_trig_end_edge(trig_edge),
-	.i_clk(i_clk),
-	.i_rst(fifo_full | limit_reached | ~_mrst),
-	.i_man_toggle(btn),
-	.o_trig(o_trig),
-	.o_run(o_run)
-);
-
-time_stepper timer(
-	.i_clk(i_clk),
-	.prescaler(time_prescaler),
-	.i_run(o_trig & _mrst),
-	.o_time(o_time)
-);
-
-pin_change_detector pcint(
-	.i_data(data),
-	.i_clk(i_clk),
-	.inhibit(~o_trig | ~_mrst),
-	.o_changed(save)
-);
-
-//wire fifo_full;
-//wire fifo_empty;
 
 //channel_fifo(
 //	.aclr(fifo_clr),
 //	.clock(i_clk),
-//	.data({o_time, data}),
+//	.data(save_data),
 //	.rdreq(fifo_read & ~fifo_empty),
 //	.wrreq(save & ~fifo_full),
 //	.empty(fifo_empty),
@@ -90,17 +64,6 @@ pin_change_detector pcint(
 //	.q(o_data)
 //);
 
-step_limiter limit (
-	.do_step_limit(do_limit),
-	.step_limit(step_limit),
-	.i_run(o_trig & _mrst),
-	.i_step(save),
-	.stop(limit_reached)
-);
-
-assign o_available = ~fifo_empty;
-
-assign o_data = {o_time, data}; //
-
+//assign o_available = ~fifo_empty;
 
 endmodule
