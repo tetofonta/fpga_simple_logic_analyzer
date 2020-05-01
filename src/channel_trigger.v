@@ -7,6 +7,8 @@ module channel_trigger
     input i_trig_start_edge,
     input [$clog2(WIDTH) - 1 : 0] i_trig_end_select,
     input i_trig_end_edge,
+    input ext_trig_start,
+    input ext_trig_end,
     input i_clk,
     input i_rst_0,
     input _i_rst_1,
@@ -28,6 +30,11 @@ wire man_ctrl;
 wire rst_0_trig;
 wire rst_1_trig;
 wire rst_trig;
+wire ext_start_trig;
+wire ext_end_trig;
+
+rising_edge_detector ext_set_re (ext_trig_start & _enable_start, i_clk, ext_start_trig);
+rising_edge_detector ext_rst_re (ext_trig_end & _enable_end, i_clk, ext_end_trig);
 
 rising_edge_detector set_re (trig_start_condition, i_clk, start_trig);
 rising_edge_detector rst_re (trig_end_condition, i_clk, end_trig);
@@ -41,8 +48,8 @@ reg r_trig = 0;
 
 wire trig_set;
 wire trig_reset;
-assign trig_set = (start_trig | (man_ctrl & ~r_trig & _i_rst_1)) & ~r_trig;
-assign trig_reset = (end_trig | (man_ctrl & r_trig & _i_rst_1)) & r_trig | rst_trig;
+assign trig_set = (start_trig | ext_start_trig | (man_ctrl & ~r_trig & _i_rst_1)) & ~r_trig;
+assign trig_reset = (end_trig | ext_end_trig | (man_ctrl & r_trig & _i_rst_1)) & r_trig | rst_trig;
 
 rs_flipflop trig_status (trig_set, trig_reset, o_trig);
 wire update_condition;
