@@ -78,11 +78,12 @@ module channel_fifo (
 	defparam
 		scfifo_component.add_ram_output_register = "ON",
 		scfifo_component.intended_device_family = "Cyclone II",
-		scfifo_component.lpm_numwords = 1024,
+		scfifo_component.lpm_hint = "RAM_BLOCK_TYPE=M4K",
+		scfifo_component.lpm_numwords = 512,
 		scfifo_component.lpm_showahead = "OFF",
 		scfifo_component.lpm_type = "scfifo",
 		scfifo_component.lpm_width = 32,
-		scfifo_component.lpm_widthu = 10,
+		scfifo_component.lpm_widthu = 9,
 		scfifo_component.overflow_checking = "OFF",
 		scfifo_component.underflow_checking = "OFF",
 		scfifo_component.use_eab = "ON";
@@ -99,7 +100,7 @@ endmodule
 // Retrieval info: PRIVATE: AlmostFullThr NUMERIC "-1"
 // Retrieval info: PRIVATE: CLOCKS_ARE_SYNCHRONIZED NUMERIC "1"
 // Retrieval info: PRIVATE: Clock NUMERIC "0"
-// Retrieval info: PRIVATE: Depth NUMERIC "1024"
+// Retrieval info: PRIVATE: Depth NUMERIC "512"
 // Retrieval info: PRIVATE: Empty NUMERIC "1"
 // Retrieval info: PRIVATE: Full NUMERIC "1"
 // Retrieval info: PRIVATE: INTENDED_DEVICE_FAMILY STRING "Cyclone II"
@@ -108,7 +109,7 @@ endmodule
 // Retrieval info: PRIVATE: MAX_DEPTH_BY_9 NUMERIC "0"
 // Retrieval info: PRIVATE: OVERFLOW_CHECKING NUMERIC "1"
 // Retrieval info: PRIVATE: Optimize NUMERIC "1"
-// Retrieval info: PRIVATE: RAM_BLOCK_TYPE NUMERIC "0"
+// Retrieval info: PRIVATE: RAM_BLOCK_TYPE NUMERIC "2"
 // Retrieval info: PRIVATE: SYNTH_WRAPPER_GEN_POSTFIX STRING "0"
 // Retrieval info: PRIVATE: UNDERFLOW_CHECKING NUMERIC "1"
 // Retrieval info: PRIVATE: UsedW NUMERIC "0"
@@ -128,11 +129,12 @@ endmodule
 // Retrieval info: LIBRARY: altera_mf altera_mf.altera_mf_components.all
 // Retrieval info: CONSTANT: ADD_RAM_OUTPUT_REGISTER STRING "ON"
 // Retrieval info: CONSTANT: INTENDED_DEVICE_FAMILY STRING "Cyclone II"
-// Retrieval info: CONSTANT: LPM_NUMWORDS NUMERIC "1024"
+// Retrieval info: CONSTANT: LPM_HINT STRING "RAM_BLOCK_TYPE=M4K"
+// Retrieval info: CONSTANT: LPM_NUMWORDS NUMERIC "512"
 // Retrieval info: CONSTANT: LPM_SHOWAHEAD STRING "OFF"
 // Retrieval info: CONSTANT: LPM_TYPE STRING "scfifo"
 // Retrieval info: CONSTANT: LPM_WIDTH NUMERIC "32"
-// Retrieval info: CONSTANT: LPM_WIDTHU NUMERIC "10"
+// Retrieval info: CONSTANT: LPM_WIDTHU NUMERIC "9"
 // Retrieval info: CONSTANT: OVERFLOW_CHECKING STRING "OFF"
 // Retrieval info: CONSTANT: UNDERFLOW_CHECKING STRING "OFF"
 // Retrieval info: CONSTANT: USE_EAB STRING "ON"

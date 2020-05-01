@@ -38,11 +38,14 @@ wire [31:0] save_data;
 channel_input port_a (
     .i_clk(i_clk),
     .start_trigger_index(3'b001),
-    .start_trigger_edge(1'b0),
+    .start_trigger_edge(1'b1),
     ._start_trigger_enable(1'b0),
     .end_trigger_index(3'b011),
     .end_trigger_edge(1'b1),
-    ._end_trigger_enable(1'b0),
+    ._end_trigger_enable(1'b1),
+	 .once(1'b1),
+	 .ext_trig_start(1'b0), //todo re
+    .ext_trig_end(1'b0), //todo re on ~ext_start
     .manual_toggle(i_btn),
     .sample_limit(32'h30),
     .do_sample_limit(1'b1),

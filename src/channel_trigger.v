@@ -15,14 +15,18 @@ module channel_trigger
     input i_man_toggle,
     input _enable_start,
     input _enable_end,
+	 input once,
     output o_trig,
     output o_run
 );
 
 wire trig_start_condition;
 wire trig_end_condition;
-assign trig_start_condition = (i_data[i_trig_start_select] ^ i_trig_start_edge) & ~_enable_start;
+wire asserted;
+assign trig_start_condition = (i_data[i_trig_start_select] ^ i_trig_start_edge) & ~_enable_start & ~asserted;
 assign trig_end_condition = (i_data[i_trig_end_select] ^ i_trig_end_edge) & ~_enable_end;
+
+rs_flipflop once_filter (trig_start_condition & once & _i_rst_1, ~_i_rst_1, asserted);
 
 wire start_trig;
 wire end_trig;

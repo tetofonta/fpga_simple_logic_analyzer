@@ -13,6 +13,9 @@ module channel_input(
     input _mrst,
     input fifo_full,
     input [7:0] i_data,
+	 input ext_trig_start,
+    input ext_trig_end,
+	 input once,
     output save,
     output [31:0] data,
     output run
@@ -42,6 +45,9 @@ channel_trigger trigger(
     .i_man_toggle(man_toggle_db),
     .i_rst_0(trigger_stop | fifo_full),
     ._i_rst_1(_mrst),
+	 .once(once),
+	 .ext_trig_start(ext_trig_start),
+    .ext_trig_end(ext_trig_end),
     .o_run(run),
     .o_trig(trigger_status)
 );
