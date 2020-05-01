@@ -11,6 +11,7 @@ module channel_input(
     input do_sample_limit,
     input [31:0] time_prescaler,
     input _mrst,
+    input fifo_full,
     input [7:0] i_data,
     output save,
     output [31:0] data,
@@ -39,7 +40,7 @@ channel_trigger trigger(
     .i_trig_end_edge(end_trigger_edge),
     ._enable_end(_end_trigger_enable),
     .i_man_toggle(man_toggle_db),
-    .i_rst_0(trigger_stop),
+    .i_rst_0(trigger_stop | fifo_full),
     ._i_rst_1(_mrst),
     .o_run(run),
     .o_trig(trigger_status)

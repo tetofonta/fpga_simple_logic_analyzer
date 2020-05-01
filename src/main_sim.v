@@ -46,7 +46,8 @@ channel_input port_a (
     .sample_limit(32'h07),
     .do_sample_limit(1'b1),
     .time_prescaler(32'h01), //25M
-    ._mrst(rst_line & ~fifo_empty),
+    ._mrst(rst_line),
+    .fifo_full(fifo_full),
     .i_data(data),
     .save(save),
     .data(save_data),
