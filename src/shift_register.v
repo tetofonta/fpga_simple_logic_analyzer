@@ -16,9 +16,9 @@ begin
     if(fetch)
         bits <= parallel_load;
     else
-        bits <= {bits[BITS-2:0], ser_in};
+        bits <= {ser_in, bits[BITS-1:1]};
 end
 
-assign ser_out = bits[BITS-1];
+assign ser_out = bits[0];
 
 endmodule
