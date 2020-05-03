@@ -1,5 +1,5 @@
 module channel(
-    input i_clk,
+	input i_clk,
 	input [7:0] data,
 	input i_btn,
 	input _mrst,
@@ -14,21 +14,20 @@ module channel(
 	input trig_once,
     input ext_trigger,
 
-    input [31:0] sample_limit,
-    input sample_limit_enable,
+	 input [31:0] sample_limit,
+	 input sample_limit_enable,
 
-    input [31:0] time_prescaler,
+	 input [31:0] time_prescaler,
 
-    input read,
-    output [31:0] o_data,
-    output available,
-    output o_run
-);
+	 input read,
+	 output [31:0] o_data,
+	 output available,
+	 output o_run
+	);
 
 wire rst_line;
 reset_manager ch_rst(.i_clk(i_clk), ._rst(_mrst), ._o_rst(rst_line));
 
-wire fifo_clear = 0;
 wire fifo_read;
 wire read_sig;
 wire fifo_empty;
@@ -40,7 +39,7 @@ wire start_ext;
 wire stop_ext;
 
 rising_edge_detector ext_start(.i_clk(i_clk), .i_signal(ext_trigger), .o_trig(start_ext));
-rising_edge_detector ext_start(.i_clk(i_clk), .i_signal(~ext_trigger), .o_trig(stop_edge));
+rising_edge_detector ext_stop(.i_clk(i_clk), .i_signal(~ext_trigger), .o_trig(stop_ext));
 
 channel_input port (
     .i_clk(i_clk),
@@ -72,7 +71,7 @@ rising_edge_detector read_edge(
 	.o_trig(fifo_read)
 );
 
-channel_fifo(
+channel_fifo data_fifo(
 	.aclr(~rst_line),
 	.clock(i_clk),
 	.data(save_data),

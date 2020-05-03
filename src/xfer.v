@@ -27,7 +27,7 @@ localparam ST_CH_WAIT_COMPLETE = 3;
 
 reg [5:0] status = ST_CH_AVAILABLE;
 
-always @(negedge i_clk, posedge i_clk)
+always @(negedge i_clk)
 begin
     case (status)
         ST_CH_AVAILABLE: begin

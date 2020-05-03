@@ -16,9 +16,11 @@ initial tx_pin = 1;
 wire wire_rst;
 reset_manager tx_rst(.i_clk(i_clk), ._rst(_rst), .o_rst(wire_rst));
 
-wire bit;
-reg shift = 0;
-shift_register #(.BITS(32)) register (.parallel_load(data), .fetch(fetch), .i_clk(shift), .ser_out(bit), .ser_in(1'b0));
+wire bit_out;
+wire shift;
+reg shift_on_clk = 0;
+assign shift = bit_clk & shift_on_clk;
+shift_register #(.BITS(32)) register (.parallel_load(data), .fetch(fetch), .i_clk(shift | fetch), .ser_out(bit_out), .ser_in(1'b0));
 
 wire send_status;
 assign busy = send_status;
@@ -48,14 +50,16 @@ begin
             status <= TX_SEND_BIT;
         end
         TX_SEND_BIT: begin
-            tx_pin <= bit;
-            shift <= ~shift;
+				shift_on_clk <= 1;
+            tx_pin <= bit_out;
             bit_sent <= bit_sent + 1;
             if(bit_sent == 7 || bit_sent == 15 || bit_sent == 23 || bit_sent == 31) begin
                 status <= TX_STOP_BIT;
+					 shift_on_clk <= 0;
             end
         end
         TX_STOP_BIT: begin
+				shift_on_clk <= 0;
             tx_pin <= 1;
             if(bit_sent == 32) status = TX_CLEAR;
             else status = TX_START_BIT;

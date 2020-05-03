@@ -11,7 +11,7 @@ module shift_register
 
 reg [BITS - 1 : 0] bits;
 
-always @(posedge (i_clk | fetch), negedge i_clk)
+always @(posedge i_clk)
 begin
     if(fetch)
         bits <= parallel_load;
