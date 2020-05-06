@@ -23,7 +23,7 @@ begin
         internal_rst <= 0;
     if(counter > CLOCKS_AFTER + CLOCKS_AFTER)
         rst_ownership <= 1;
-    counter <= counter + 1;
+    counter <= counter + 1'b1;
 end
 
 endmodule

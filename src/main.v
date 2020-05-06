@@ -51,7 +51,7 @@ begin
         begin
             sh_clk_stop <= 0;
             sh_clk <= ~sh_clk;
-            shifted <= shifted + 1;
+            shifted <= shifted + 1'b1;
         end
     else
         sh_clk_stop <= 0;
@@ -65,19 +65,19 @@ generate
             port_data[(i+1)*8 - 1 : i*8],
             togs[i],
             _rsts[i],
-            ch_conf[i*80+2:i+80],
-            ch_conf[i*80+10:i+80+8],
+            ch_conf[i*80+2:i*80],
+            ch_conf[i*80+10:i*80+8],
             ch_conf[i*80+3],
             ch_conf[i*80+11],
             ch_conf[i*80+4],
             ch_conf[i*80+12],
             ch_conf[i*80+15],
             ext_trigs[i],
-            ch_conf[i*80+79:i+80+48],
+            ch_conf[i*80+79:i*80+48],
             ch_conf[i*80+7],
-            ch_conf[i*80+47:i+80+16], 
+            ch_conf[i*80+47:i*80+16], 
             reads[i],
-            data[(i+1)*32 - 1:0],
+            data[(i+1)*32 - 1:i*32],
             availables[i],
             runs[i]
          );
