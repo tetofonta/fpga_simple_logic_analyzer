@@ -25,7 +25,7 @@ assign busy = send_status;
 reg stop_transmit = 0;
 wire stop_re;
 rising_edge_detector stop_transmit_re(.i_clk(i_clk), .i_signal(stop_transmit), .o_trig(stop_re));
-rs_flipflop tx_status (.i_set(transmit & _rst & ~stop_re), .i_rst(stop_re | ~_rst), .q(send_status));
+rs_flipflop tx_status (.i_set(transmit), .i_rst(stop_re | ~_rst), .q(send_status));
 
 wire bit_clk;
 prescaler #(.PRESCALER(BAUD_PRESCALER)) baud_gen (.i_clk(i_clk), .o_clk(bit_clk), .run(send_status));

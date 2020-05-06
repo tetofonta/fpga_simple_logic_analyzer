@@ -6,7 +6,8 @@ module shift_register
     input i_clk,
     input fetch,
     input ser_in,
-    output ser_out
+    output ser_out,
+	 output [BITS-1:0] par_out
 );
 
 reg [BITS - 1 : 0] bits;
@@ -20,5 +21,6 @@ begin
 end
 
 assign ser_out = bits[0];
+assign par_out = bits;
 
 endmodule
