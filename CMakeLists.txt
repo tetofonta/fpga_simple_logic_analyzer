@@ -9,7 +9,7 @@ test_target(timer test/timer_stepper_test.v src/time_stepper.v)
 test_target(step_limit test/step_limiter_test.v src/step_limiter.v)
 test_target(debouncer test/debouncer_test.v src/debouncer.v)
 test_target(chinput test/channel_input_test.v src/channel_input.v src/debouncer.v src/channel_trigger.v src/pin_change_detector.v src/rising_edge_detector.v src/rs_flipflop.v src/step_limiter.v src/time_stepper.v)
-test_target(main test/test.v src/main_sim.v src/channel_input.v src/debouncer.v src/channel_trigger.v src/pin_change_detector.v src/rising_edge_detector.v src/rs_flipflop.v src/step_limiter.v src/time_stepper.v)
 test_target(xfer test/xfer_test.v src/bus_selector.v src/xfer.v src/shift_register.v src/uart_tx.v src/rs_flipflop.v src/reset_manager.v src/prescaler.v src/rising_edge_detector.v)
 test_target(rx test/uart_rx_test.v src/uart_rx.v src/prescaler.v src/rs_flipflop.v src/pin_change_detector.v src/rising_edge_detector.v)
+test_target(test test/test.v src/uart_rx.v src/shift_register.v src/rising_edge_detector.v src/rs_flipflop.v src/pin_change_detector.v src/reset_manager.v src/prescaler.v)
 
