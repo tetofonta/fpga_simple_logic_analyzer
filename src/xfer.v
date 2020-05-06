@@ -7,6 +7,7 @@ module transfer
     input [CH_NO - 1:0] available,
     output reg [CH_NO - 1:0] read,
     input i_clk,
+    input _rst,
     output tx_pin
 );
 
@@ -17,8 +18,9 @@ reg uart_load = 0;
 reg start_transmit = 0;
 wire uart_busy;
 bus_selector #(.BUS_NO(CH_NO)) mux (.data(data_in), .sel(bus_sel), .out(ch_data));
+
 assign uart_data = {bus_sel, ch_data[31-$clog2(CH_NO):0]};
-uart_tx #(.BAUD_PRESCALER(BAUD_PRESCALER)) tx (.i_clk(i_clk), .fetch(uart_load), .data(uart_data), .transmit(start_transmit), .busy(uart_busy), ._rst(1'b1), .tx_pin(tx_pin));
+uart_tx #(.BAUD_PRESCALER(BAUD_PRESCALER)) tx (.i_clk(i_clk), .fetch(uart_load), .data(uart_data), .transmit(start_transmit), .busy(uart_busy), ._rst(_rst), .tx_pin(tx_pin));
 
 localparam ST_CH_AVAILABLE = 0;
 localparam ST_CH_READ = 1;

@@ -1,6 +1,7 @@
 module prescaler
 #(
-    parameter PRESCALER = 1000
+    parameter PRESCALER = 1000,
+    parameter START_VALUE = 0
 )(
     input i_clk,
     input run,
@@ -9,7 +10,7 @@ module prescaler
 
 initial o_clk = 0;
 
-reg [$clog2(PRESCALER) - 1:0] count = 0;
+reg [$clog2(PRESCALER) - 1:0] count = START_VALUE;
 
 always @(posedge i_clk)
 begin
@@ -23,7 +24,7 @@ begin
             o_clk <= 0;
         end
     else begin
-        count <= 0;
+        count <= START_VALUE;
         o_clk <= 0;
     end
 end
